@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfApp1"
+        xmlns:local="clr-namespace:WpfApp1" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
@@ -11,7 +11,22 @@
             <RowDefinition Height="0.6*"></RowDefinition>
             <RowDefinition Height="7*"></RowDefinition>
         </Grid.RowDefinitions>
-        <ComboBox></ComboBox>
+        <ComboBox ItemsSource="{Binding Beers}" Name="BeersCB">
+            <ComboBox.ItemTemplate >
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" >
+                        <Label Content="{Binding Name}" Margin="0,0,10,0"  Width="100" FontSize="14" FontWeight="ExtraBlack"  ></Label>
+                        <Label Content="{Binding Price}" Margin="0,0,10,0"  Width="100" FontSize="14" FontWeight="ExtraBlack"  ></Label>
+                        <Label Content="{Binding Volume}" Margin="0,0,10,0"  Width="100" FontSize="14" FontWeight="ExtraBlack"  ></Label>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged" >
+                    <i:InvokeCommandAction Command="{Binding SelectCommand}" CommandParameter="{Binding ElementName=BeersCB,Path=SelectedItem}" ></i:InvokeCommandAction>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ComboBox>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="7*"></RowDefinition>
@@ -22,15 +37,15 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Grid></Grid>
+                <Image Name="MainImage" Source="{Binding ImagePath.Source}"></Image>
                 <WrapPanel Grid.Column="1">
                     <Label Width="100" Height="70" Content="Name:" FontSize="26" ></Label>
-                    <Label Width="200" Height="70" Content="{Binding Beer.Name}" FontSize="26" Margin="0,0,20,0" ></Label>
-                    <Label Width="100" Height="70" Content="Price:" FontSize="26" ></Label>
-                    <Label Width="200" Height="70" Content="{Binding Beer.Price}" FontSize="26" Margin="0,0,20,0" ></Label>
+                    <Label Name="NameLbl" Width="200" Height="70" Content="{Binding Beer.Name}" FontSize="26" Margin="0,0,20,0" ></Label>
+                    <Label  Width="100" Height="70" Content="Price:" FontSize="26" ></Label>
+                    <Label Name="PriceLbl" Width="200" Height="70" Content="{Binding Beer.Price}" FontSize="26" Margin="0,0,20,0" ></Label>
                     <Label Width="100" Height="70" Content="Volume:" FontSize="26" ></Label>
-                    <Label Width="200" Height="70" Content="{Binding Beer.Volume}" FontSize="26" Margin="0,0,90,0" ></Label>
-                    <Button Width="30" Height="30" FontSize="20" Background="Transparent">
+                    <Label Name="VolumeLbl" Width="200" Height="70" Content="{Binding Beer.Volume}" FontSize="26" Margin="0,0,90,0" ></Label>
+                    <Button Width="30" Height="30" FontSize="20" Background="Transparent" Command="{Binding DecreaseCountCommand}">
                         <Image Source="\Images\minus.png"></Image>
                         <Button.Resources>
                             <Style TargetType="Border">
@@ -38,8 +53,9 @@
                             </Style>
                         </Button.Resources>
                     </Button>
-                    <Label Width="50"></Label>
-                    <Button Width="30" Height="30"  FontSize="20">
+                    <Label Width="50" FontFamily="36" HorizontalContentAlignment="Stretch" Content="{Binding CountStr}"></Label>
+                    <Button Width="30" Height="30" FontSize="20" Background="Transparent" Command="{Binding IncreaseCountCommand}">
+                        <Image Source="\Images\Plus_144px.png" Stretch="UniformToFill"></Image>
                         <Button.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" Value="50"/>
